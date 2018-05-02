@@ -22,13 +22,13 @@ import java.util.Date;
 import service.EnregistreInscription;
 
 /**
- * Message-Driven Bean implementation class for: DemandeInscriptionTopic
+ * Message-Driven Bean implementation class for: CerisaieTopic
  */
 // On se connecte à la file d'attente InscriptionTopic
 @MessageDriven(activationConfig = {
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/exported/topic/InscriptionJmsTopic"),
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")}, mappedName = "InscriptionJmsTopic")
-public class DemandeInscriptionTopic implements MessageListener {
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/exported/topic/CerisaieTopic"),
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")}, mappedName = "CerisaieTopic")
+public class CerisaieTopic implements MessageListener {
 
     @Resource
     private MessageDrivenContext context;
@@ -36,7 +36,7 @@ public class DemandeInscriptionTopic implements MessageListener {
     /*
      * Default constructor.
      */
-    public DemandeInscriptionTopic() {
+    public CerisaieTopic() {
         // TODO Auto-generated constructor stub
     }
 
@@ -52,22 +52,21 @@ public class DemandeInscriptionTopic implements MessageListener {
             if (message != null) {
                 System.out.println("je suis là ");
                 ObjectMessage objectMessage = (ObjectMessage) message;
-                Inscription uneInscription = (Inscription) objectMessage.getObject();
+                Activite uneActivite = (Activite) objectMessage.getObject();
                 // On insère cette demande d'inscription dans la base de données
                 // on s'assure que l'écriture ne se fera qu'une fois.
                 message = null;
                 try {
                     // on construit un objet Entity
-                    InscriptionEntity uneInsEntity = new InscriptionEntity();
+                    ActiviteEntity activiteEntity = new ActiviteEntity();
                     // on tansfère les données reçues dans l'objet Entity
-                    uneInsEntity.setNomcandidat(uneInscription.getNomcandidat());
-                    uneInsEntity.setPrenomcandidat(uneInscription.getPrenomcandidat());
-                    uneInsEntity.setCpostal(uneInscription.getCpostal());
-                    uneInsEntity.setVille(uneInscription.getVille());
-                    uneInsEntity.setAdresse(uneInscription.getAdresse());
-                    uneInsEntity.setDatenaissance(uneInscription.getDatenaissance());
+                    activiteEntity.setCodesport(uneActivite.getCodesport());
+                    activiteEntity.setDatejour(uneActivite.getDatejour());
+                    activiteEntity.setNbloc(uneActivite.getNbloc());
+                    activiteEntity.setNumsejour(uneActivite.getNumsejour());
+
                     EnregistreInscription uneE = new EnregistreInscription();
-                    uneE.insertionInscription(uneInsEntity);
+                    uneE.insertionInscription(activiteEntity);
                 } catch (NamingException er) {
                     EcritureErreur(er.getMessage());
                 } catch (MonException e) {

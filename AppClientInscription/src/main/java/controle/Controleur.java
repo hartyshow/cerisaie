@@ -16,9 +16,8 @@ import java.sql.Date;
 
 import javax.annotation.Resource;
 import meserreurs.MonException;
-import metier.Inscription;
+import metier.Activite;
 
-import javax.naming.NamingException;
 
 /**
  * Servlet implementation class Traitement
@@ -36,7 +35,7 @@ public class Controleur extends HttpServlet {
 	 * @see HttpServlet#HttpServlet()
 	 */
 
-	@Resource(lookup = "java:jboss/exported/topic/InscriptionJmsTopic")
+	@Resource(lookup = "java:jboss/exported/topic/CerisaieTopic")
 	private Topic topic;
 	// On accède à l'EJB
 
@@ -121,21 +120,20 @@ public class Controleur extends HttpServlet {
 					initDate= formatter.parse(parsedDate);
 					Date uneDate = new Date(initDate.getTime());
 
-					String adresse = request.getParameter("adresse");
-					String cpostal = request.getParameter("cpostal");
-					String ville = request.getParameter("ville");
+					int codesport = Integer.getInteger(request.getParameter("codesport"));
+					int nbloc = Integer.getInteger(request.getParameter("nbloc"));
+					int numsejour = Integer.getInteger(request.getParameter("numsejour"));
+					Date datejour = Date.valueOf(request.getParameter("datejour"));
 
 					// On crée une demande d'inscription avec ces valeurs
-					Inscription unedemande = new Inscription();
-					unedemande.setNomcandidat(nom);
-					unedemande.setPrenomcandidat(prenom);
-					unedemande.setDatenaissance(uneDate);
-					unedemande.setAdresse(adresse);
-					unedemande.setCpostal(cpostal);
-					unedemande.setVille(ville);
+					Activite uneActivite = new Activite();
+					uneActivite.setCodesport(codesport);
+					uneActivite.setNbloc(nbloc);
+					uneActivite.setNumsejour(numsejour);
+					uneActivite.setDatejour(datejour);
 
 					// On envoie cette demande d'inscription dans le topic
-					boolean ok = envoi(unedemande);
+					boolean ok = envoi(uneActivite);
 					if (ok)
 						// On retourne àla page d'accueil
 						this.getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
@@ -159,12 +157,12 @@ public class Controleur extends HttpServlet {
 	/**
 	 * Permet de publier une demande d'inscription dans le topic
 	 * 
-	 * @param uneDemande
+	 * @param uneActivite
 	 *            La demande d'inscription � publier
 	 * @return
 	 * @throws Exception
 	 */
-	boolean envoi(Inscription uneDemande) throws Exception {
+	boolean envoi(Activite uneActivite) throws Exception {
 
 		boolean ok = true;
 		TopicConnection connection = null;
@@ -187,7 +185,7 @@ public class Controleur extends HttpServlet {
 			// On lance la connection
 			connection.start();
 			ObjectMessage message = session.createObjectMessage();
-			message.setObject(uneDemande);
+			message.setObject(uneActivite);
 			// On publie le message
 			producer.publish(message);
 			producer.close();

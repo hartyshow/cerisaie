@@ -2,7 +2,7 @@ package service;
 
 import meserreurs.MonException;
 import javax.persistence.*;
-import metier.InscriptionEntity;
+import metier.ActiviteEntity;
 
 public class EnregistreInscription {
 
@@ -10,7 +10,7 @@ public class EnregistreInscription {
     private EntityManagerFactory factory;
     private  EntityManager entityManager;
 
-    public  void insertionInscription(InscriptionEntity uneI) throws Exception, MonException {
+    public  void insertionInscription(ActiviteEntity uneI) throws Exception, MonException {
 
        // On instancie l'entity Manager
         factory = Persistence.createEntityManagerFactory("PInscription");

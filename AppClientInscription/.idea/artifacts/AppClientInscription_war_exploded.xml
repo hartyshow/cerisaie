@@ -7,7 +7,6 @@
           <element id="module-output" name="AppClientInscription" />
         </element>
         <element id="directory" name="lib">
-          <element id="file-copy" path="C:/wildfly-10.0.0.Final/bin/client/jboss-cli-client.jar" />
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
         </element>
       </element>

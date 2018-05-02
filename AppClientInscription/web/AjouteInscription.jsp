@@ -28,33 +28,28 @@
     <div class="container">
         <div class="well">
 
-            <h1>Ajouter une inscription</h1>
+            <h1>S'inscrire à une activité</h1>
             <div class="form-group">
-                <label for="nom">Nom</label>
-                <input type="text" class="form-control" name="nom">
+                <label for="codesport">Code du sport</label>
+                <input type="text" class="form-control" name="codesport" id="codesport">
             </div>
 
             <div class="form-group">
-                <label for="prenom">Prenom</label>
-                <input type="text" class="form-control" name="prenom">
+                <label for="nbloc">Nombre d'heures</label>
+                <input type="number" class="form-control" name="nbloc" id="nbloc" min="1">
             </div>
+
             <div class="form-group">
-                <label for="datenaissance"> Date Naissance:</label>
-                <input name="datenaissance" id ="datenaissance" class="form-control" min="0">
+                <label for="numsejour">Numéro séjour</label>
+                <input type="number" name="numsejour" id ="numsejour" class="form-control" min="0">
             </div>
-            <script>$( "#datenaissance" ).datepicker();</script>
+
             <div class="form-group">
-                <label for="adresse">Adresse</label>
-                <input type="text" class="form-control" name="adresse" value="">
+                <label for="datejour">Adresse</label>
+                <input type="text" class="form-control" name="datejour" id="datejour" value="">
             </div>
-            <div class="form-group">
-                <label for="cpostal">Code postal</label>
-                <input type="text" class="form-control" name="cpostal" value="">
-            </div>
-            <div class="form-group">
-                <label for="ville">Ville</label>
-                <input type="text" class="form-control" name="ville" value="">
-            </div>
+            <script>$( "#datejour" ).datepicker();</script>
+
             <div class="form-group">
                 <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-ok"></span>
                     Valider
