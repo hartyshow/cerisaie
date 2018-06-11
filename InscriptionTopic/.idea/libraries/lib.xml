@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="file://C:/Wildlfly_10.1.0/standalone/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../../../../Downloads/Logiciels/wildfly-12.0.0.Final/standalone/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

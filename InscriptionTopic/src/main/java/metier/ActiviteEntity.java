@@ -1,15 +1,16 @@
 package metier;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "Activite", schema = "cerisaie", catalog = "")
-public class ActiviteEntity {
+public class ActiviteEntity implements Serializable {
 
     private int codesport;
     private Date datejour;
-    private int numsejour;
+    private int numsej;
     private int nbloc;
 
     @Id
@@ -33,13 +34,13 @@ public class ActiviteEntity {
     }
 
     @Id
-    @Column(name = "numsejour")
-    public int getNumsejour() {
-        return numsejour;
+    @Column(name = "numsej")
+    public int getNumsej() {
+        return numsej;
     }
 
-    public void setNumsejour(int numsejour) {
-        this.numsejour = numsejour;
+    public void setNumsej(int numsej) {
+        this.numsej = numsej;
     }
 
     @Basic
@@ -61,7 +62,7 @@ public class ActiviteEntity {
 
         if (codesport != that.codesport) return false;
         if (datejour != null ? !datejour.equals(that.datejour) : that.datejour != null) return false;
-        if (numsejour != that.numsejour) return false;
+        if (numsej != that.numsej) return false;
         if (nbloc != that.nbloc) return false;
 
         return true;
@@ -71,7 +72,7 @@ public class ActiviteEntity {
     public int hashCode() {
         int result = codesport;
         result = 31 * result + (datejour != null ? datejour.hashCode() : 0);
-        result = 31 * result + numsejour;
+        result = 31 * result + numsej;
         result = 31 * result + nbloc;
         return result;
     }
