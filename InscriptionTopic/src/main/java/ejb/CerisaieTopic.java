@@ -63,7 +63,7 @@ public class CerisaieTopic implements MessageListener {
                     activiteEntity.setCodesport(uneActivite.getCodesport());
                     activiteEntity.setDatejour(uneActivite.getDatejour());
                     activiteEntity.setNbloc(uneActivite.getNbloc());
-                    activiteEntity.setNumsejour(uneActivite.getNumsejour());
+                    activiteEntity.setNumsej(uneActivite.getNumsejour());
 
                     EnregistreInscription uneE = new EnregistreInscription();
                     uneE.insertionInscription(activiteEntity);

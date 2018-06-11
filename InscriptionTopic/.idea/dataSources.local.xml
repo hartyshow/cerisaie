@@ -11,5 +11,14 @@
       <user-name>userepul</user-name>
       <introspection-schemas>*:lesinscriptions</introspection-schemas>
     </data-source>
+    <data-source name="PInscription/Hibernate" uuid="126ccdba-a6d4-4d47-bc52-a1b9e7861913">
+      <database-info product="MySQL" version="5.5.5-10.1.31-MariaDB" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <user-name>userepul</user-name>
+      <introspection-schemas>*:cerisaie</introspection-schemas>
+    </data-source>
   </component>
 </project>

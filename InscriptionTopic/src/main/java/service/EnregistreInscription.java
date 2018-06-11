@@ -2,15 +2,20 @@ package service;
 
 import meserreurs.MonException;
 import javax.persistence.*;
+
+import metier.Activite;
 import metier.ActiviteEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EnregistreInscription {
 
   // on décvlare un EntityManager
     private EntityManagerFactory factory;
-    private  EntityManager entityManager;
+    private EntityManager entityManager;
 
-    public  void insertionInscription(ActiviteEntity uneI) throws Exception, MonException {
+    public void insertionInscription(ActiviteEntity uneI) throws Exception, MonException {
 
        // On instancie l'entity Manager
         factory = Persistence.createEntityManagerFactory("PInscription");
@@ -33,6 +38,26 @@ public class EnregistreInscription {
             new MonException("Erreur d'insertion", h.getMessage());
         } catch (Exception e) {
             new MonException("Erreur d'insertion", e.getMessage());
+        }
+    }
+
+    public List<Activite> getActivites() {
+
+        // On instancie l'entity Manager
+        factory = Persistence.createEntityManagerFactory("PInscription");
+        entityManager  = factory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            List<Activite> activites = entityManager.createQuery("SELECT a FROM ActiviteEntity a").getResultList();
+            entityManager.close();
+
+            return activites;
+        }
+        catch (Exception e) {
+            new MonException("Erreur d'insertion", e.getMessage());
+
+            return null;
         }
     }
 }

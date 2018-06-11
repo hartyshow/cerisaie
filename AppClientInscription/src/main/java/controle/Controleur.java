@@ -11,13 +11,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.text.SimpleDateFormat;
 
-
 import java.sql.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import meserreurs.MonException;
 import metier.Activite;
-
+import metier.Sport;
+import service.Utils;
 
 /**
  * Servlet implementation class Traitement
@@ -45,8 +46,7 @@ public class Controleur extends HttpServlet {
 	// Session établie avec le serveur
 	private TopicSession session = null;
 
-	// Le client utilise un Producteur de messsage pour envoyer une demande de
-	// formation
+	// Le client utilise un Producteur de messsage pour envoyer une demande de formation
 	private TopicPublisher producer;
 
 	/**
@@ -59,8 +59,7 @@ public class Controleur extends HttpServlet {
 	/**
 	 * 
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			TraiteRequete(request, response);
 		} catch (Exception e) {
@@ -72,8 +71,7 @@ public class Controleur extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
 			TraiteRequete(request, response);
@@ -90,66 +88,54 @@ public class Controleur extends HttpServlet {
 		// On récupère l'action
 		String actionName = request.getParameter(ACTION_TYPE);
 
-		// Si on veut afficher l'ensemble des demandes d'inscription
+		// Affichage du formulaire d'inscription à une activité
 		if (AJOUTER_INSCRIPTION.equals(actionName)) {
+			request.setAttribute("sports", new Utils().getSports());
+			request.setAttribute("activites", new Utils().getActivites());
+			request.setAttribute("emplacements", new Utils().getEmplacements());
 
 			request.getRequestDispatcher("AjouteInscription.jsp").forward(request, response);
+		}
 
-			} else if (RETOUR_ACCUEIL.equals(actionName)) {
+		else if (RETOUR_ACCUEIL.equals(actionName)) {
 			this.getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
 		}
 
 		else if (ENVOI_INSCRIPTION.equals(actionName))
 		{
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			response.setContentType("text/html;charset=UTF-8");
-			// On récupère les informations sisies
-			String nom = request.getParameter("nom");
-			String prenom = request.getParameter("prenom");
 
-			if ((nom != null) && (prenom != null)) {
-				try {
-					// On récupère la valeur des autres champs saisis par
-					// l'utilisateur
-					// on transfome la date
-					// au format Mysql java.sql.Date
-					String datenaissance = request.getParameter("datenaissance");
-					java.util.Date initDate = new SimpleDateFormat("dd/MM/yyyy").parse(datenaissance);
-					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-					String parsedDate = formatter.format(initDate);
-					initDate= formatter.parse(parsedDate);
-					Date uneDate = new Date(initDate.getTime());
+			try {
+				// On récupère la valeur des autres champs saisis par l'utilisateur
+				int codeSport = Integer.getInteger(request.getParameter("code_sport"));
+				int numEmplacement = Integer.getInteger(request.getParameter("num_emplacement"));
+				Date dateReservation = Date.valueOf(request.getParameter("datejour"));
 
-					int codesport = Integer.getInteger(request.getParameter("codesport"));
-					int nbloc = Integer.getInteger(request.getParameter("nbloc"));
-					int numsejour = Integer.getInteger(request.getParameter("numsejour"));
-					Date datejour = Date.valueOf(request.getParameter("datejour"));
+				// On crée une demande d'inscription avec ces valeurs
+				Activite uneActivite = new Activite();
+				uneActivite.setCodesport(codeSport);
+				uneActivite.setNumsejour(numEmplacement);
+				uneActivite.setDatejour(dateReservation);
 
-					// On crée une demande d'inscription avec ces valeurs
-					Activite uneActivite = new Activite();
-					uneActivite.setCodesport(codesport);
-					uneActivite.setNbloc(nbloc);
-					uneActivite.setNumsejour(numsejour);
-					uneActivite.setDatejour(datejour);
-
-					// On envoie cette demande d'inscription dans le topic
-					boolean ok = envoi(uneActivite);
-					if (ok)
-						// On retourne àla page d'accueil
-						this.getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
-					else {
-						this.getServletContext().getRequestDispatcher("/Erreur.jsp").include(request, response);
-					}
-				}catch (MonException m) {
-					// On passe l'erreur à  la page JSP
-					request.setAttribute("MesErreurs", m.getMessage());
-					request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
-				}catch (Exception e) {
-					// On passe l'erreur à la page JSP
-					System.out.println("Erreur client  :" + e.getMessage());
-					request.setAttribute("MesErreurs", e.getMessage());
-					request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
+				// On envoie cette demande d'inscription dans le topic
+				boolean ok = envoi(uneActivite);
+				if (ok)
+					// On retourne à la page d'accueil
+					this.getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
+				else {
+					this.getServletContext().getRequestDispatcher("/Erreur.jsp").include(request, response);
 				}
+			}
+			catch (MonException m) {
+				// On passe l'erreur à  la page JSP
+				request.setAttribute("MesErreurs", m.getMessage());
+				request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
+			}
+			catch (Exception e) {
+				// On passe l'erreur à la page JSP
+				System.out.println("Erreur client  :" + e.getMessage());
+				request.setAttribute("MesErreurs", e.getMessage());
+				request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
 			}
 		}
 	}

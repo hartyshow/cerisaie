@@ -25,7 +25,7 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="index.jsp">Accueil</a></li>
-            <li><a href="AjouteInscription.jsp">Ajouter Inscription</a></li>
+            <li><a href="Controleur?action=ajouteInscription">Ajouter Inscription</a></li>
         </ul>
     </div>
 </nav>
