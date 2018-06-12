@@ -29,18 +29,21 @@
 
                 <div class="form-group">
                     <label for="code_sport">Activité à réserver</label>
-                    <select class="form-control" id="code_sport" name="code_sport">
+                    <select class="form-control" id="code_sport" name="codeSport">
                         <c:forEach items="${sports}" var="sport">
-                            <option value="${sport.codesport}">${sport.libellesport}</option>
+                            <option value="${sport.codesport}">${sport.libellesport} - ${sport.unitetpssport}
+                                (${sport.tarifunite}€/u)
+                            </option>
                         </c:forEach>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="num_emplacement">Numéro de votre emplacement</label>
-                    <select class="form-control" id="num_emplacement" name="num_emplacement">
-                        <c:forEach items="${emplacements}" var="emplacement">
-                            <option value="${emplacement.numempl}">${emplacement.numempl}</option>
+                    <label for="num_emplacement">Numéro de votre séjour</label>
+                    <select class="form-control" id="num_emplacement" name="numSejour">
+                        <c:forEach items="${sejours}" var="sejour">
+                            <option value="${sejour.numsej}">N°${sejour.numsej} - Emplacement ${sejour.numempl} - Numéro
+                                Client ${sejour.numcli}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -49,7 +52,12 @@
                     <label for="datejour">Date de réservation</label>
                     <input type="text" class="form-control" name="datejour" id="datejour" value="">
                 </div>
-                <script>$("#datejour").datepicker();</script>
+                <script>$("#datejour").datepicker({dateFormat: 'yy-mm-dd'});</script>
+
+                <div class="form-group">
+                    <label for="unite">Combien d'unité de temps</label>
+                    <input type="number" class="form-control" name="unite" id="unite" min="1" value="1">
+                </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-ok"></span>

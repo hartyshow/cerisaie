@@ -2,7 +2,6 @@ package metier;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 
 @Entity(name = "EmplacementEntity")
 @Table(name = "emplacement", schema = "cerisaie", catalog = "")
@@ -53,4 +52,27 @@ public class EmplacementEntity implements Serializable {
         this.nbpersmaxempl = nbpersmaxempl;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EmplacementEntity that = (EmplacementEntity) o;
+
+        if (numempl != that.numempl) return false;
+        if (codetypee != that.codetypee) return false;
+        if (surfaceEmpl != that.surfaceEmpl) return false;
+        if (nbpersmaxempl != that.nbpersmaxempl) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = numempl;
+        result = 31 * result + codetypee;
+        result = 31 * result + surfaceEmpl;
+        result = 31 * result + nbpersmaxempl;
+        return result;
+    }
 }

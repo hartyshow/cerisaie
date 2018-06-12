@@ -56,4 +56,28 @@ public class SportEntity implements Serializable {
     public String toString() {
         return "codesport : " + codesport + " / libellesport : " + libellesport + " / unitetpssport : " + unitetpssport + " / tarifunite : " + tarifunite;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SportEntity that = (SportEntity) o;
+
+        if (codesport != that.codesport) return false;
+        if (libellesport != that.libellesport) return false;
+        if (unitetpssport != that.unitetpssport) return false;
+        if (tarifunite != that.tarifunite) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = codesport;
+        result = 31 * result + libellesport.hashCode();
+        result = 31 * result + unitetpssport.hashCode();
+        result = 31 * result + tarifunite;
+        return result;
+    }
 }

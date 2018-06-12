@@ -1,12 +1,14 @@
 package service;
 
 import meserreurs.MonException;
-import javax.persistence.*;
-
 import metier.Activite;
 import metier.Emplacement;
+import metier.Sejour;
 import metier.Sport;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public class Utils {
@@ -43,8 +45,24 @@ public class Utils {
             entityManager.close();
 
             return emplacements;
+        } catch (Exception e) {
+            new MonException("Erreur de sélection des emplacements", e.getMessage());
+
+            return null;
         }
-        catch (Exception e) {
+    }
+
+    public List<Sejour> getSejours() {
+        factory = Persistence.createEntityManagerFactory("PInscription");
+        entityManager = factory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            List<Sejour> sejours = entityManager.createQuery("SELECT s FROM SejourEntity s").getResultList();
+            entityManager.close();
+
+            return sejours;
+        } catch (Exception e) {
             new MonException("Erreur de sélection des emplacements", e.getMessage());
 
             return null;

@@ -1,24 +1,20 @@
 package controle;
 
-import java.io.IOException;
+import meserreurs.MonException;
+import metier.Activite;
+import service.Utils;
+
+import javax.annotation.Resource;
 import javax.jms.*;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.text.SimpleDateFormat;
-
+import java.io.IOException;
 import java.sql.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import meserreurs.MonException;
-import metier.Activite;
-import metier.Sport;
-import service.Utils;
 
 /**
  * Servlet implementation class Traitement
@@ -92,7 +88,7 @@ public class Controleur extends HttpServlet {
 		if (AJOUTER_INSCRIPTION.equals(actionName)) {
 			request.setAttribute("sports", new Utils().getSports());
 			request.setAttribute("activites", new Utils().getActivites());
-			request.setAttribute("emplacements", new Utils().getEmplacements());
+            request.setAttribute("sejours", new Utils().getSejours());
 
 			request.getRequestDispatcher("AjouteInscription.jsp").forward(request, response);
 		}
@@ -104,38 +100,36 @@ public class Controleur extends HttpServlet {
 		else if (ENVOI_INSCRIPTION.equals(actionName))
 		{
 			response.setContentType("text/html;charset=UTF-8");
-
-			try {
-				// On récupère la valeur des autres champs saisis par l'utilisateur
-				int codeSport = Integer.getInteger(request.getParameter("code_sport"));
-				int numEmplacement = Integer.getInteger(request.getParameter("num_emplacement"));
-				Date dateReservation = Date.valueOf(request.getParameter("datejour"));
-
-				// On crée une demande d'inscription avec ces valeurs
-				Activite uneActivite = new Activite();
-				uneActivite.setCodesport(codeSport);
-				uneActivite.setNumsejour(numEmplacement);
-				uneActivite.setDatejour(dateReservation);
-
-				// On envoie cette demande d'inscription dans le topic
-				boolean ok = envoi(uneActivite);
-				if (ok)
-					// On retourne à la page d'accueil
-					this.getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
-				else {
-					this.getServletContext().getRequestDispatcher("/Erreur.jsp").include(request, response);
-				}
-			}
-			catch (MonException m) {
-				// On passe l'erreur à  la page JSP
-				request.setAttribute("MesErreurs", m.getMessage());
-				request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
-			}
-			catch (Exception e) {
-				// On passe l'erreur à la page JSP
-				System.out.println("Erreur client  :" + e.getMessage());
-				request.setAttribute("MesErreurs", e.getMessage());
-				request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
+            String codeSport = request.getParameter("codeSport");
+            String numsej = request.getParameter("numSejour");
+            Date dateReservation = Date.valueOf(request.getParameter("datejour"));
+            String nbunite = request.getParameter("unite");
+            if (codeSport != null && numsej != null && dateReservation != null && nbunite != null) {
+                try {
+                    // On crée une demande d'inscription à une activité  avec les valeurs récupérées
+                    Activite uneActivite = new Activite();
+                    uneActivite.setCodesport(Integer.parseInt(codeSport));
+                    uneActivite.setNumsejour(Integer.parseInt(numsej));
+                    uneActivite.setDatejour(dateReservation);
+                    uneActivite.setNbloc(Integer.parseInt(nbunite));
+                    // On envoie cette demande d'inscription dans le topic
+                    boolean ok = envoi(uneActivite);
+                    if (ok)
+                        // On retourne à la page d'accueil
+                        this.getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
+                    else {
+                        this.getServletContext().getRequestDispatcher("/Erreur.jsp").include(request, response);
+                    }
+                } catch (MonException m) {
+                    // On passe l'erreur à  la page JSP
+                    request.setAttribute("MesErreurs", m.getMessage());
+                    request.getRequestDispatcher("PostMessage.jsp").forward(request, response);
+                } catch (Exception e) {
+                    // On passe l'erreur à la page JSP
+                    System.out.println("Erreur client  :" + e.getMessage());
+                    request.setAttribute("MesErreurs", e.getMessage());
+                    request.getRequestDispatcher("Erreur.jsp").forward(request, response);
+                }
 			}
 		}
 	}

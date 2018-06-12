@@ -24,10 +24,9 @@
 
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,500,900);
 body {
-    background-color: #3d9fc6;
+    background-color: #009f1d;
     transition: background-color 300ms;
     font-family: 'Roboto', sans-serif;
-    background-image:url("../img/background.jpg");
     background-repeat: no-repeat;
     background-size:cover;
 }
