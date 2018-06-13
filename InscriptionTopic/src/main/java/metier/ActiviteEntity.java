@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
-@Entity
-@Table(name = "Activite", schema = "cerisaie", catalog = "")
+@Entity(name = "ActiviteEntity")
+@Table(name = "activite", schema = "cerisaie", catalog = "")
 public class ActiviteEntity implements Serializable {
 
     private int codesport;
@@ -63,7 +63,6 @@ public class ActiviteEntity implements Serializable {
         if (codesport != that.codesport) return false;
         if (datejour != null ? !datejour.equals(that.datejour) : that.datejour != null) return false;
         if (numsej != that.numsej) return false;
-        if (nbloc != that.nbloc) return false;
 
         return true;
     }
@@ -73,7 +72,11 @@ public class ActiviteEntity implements Serializable {
         int result = codesport;
         result = 31 * result + (datejour != null ? datejour.hashCode() : 0);
         result = 31 * result + numsej;
-        result = 31 * result + nbloc;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "codesport : " + codesport + " / datejour : " + datejour + " / numsej : " + numsej + " / nbloc : " + nbloc;
     }
 }

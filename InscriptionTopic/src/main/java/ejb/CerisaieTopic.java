@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import service.EnregistreInscription;
+import service.Service;
 
 /**
  * Message-Driven Bean implementation class for: CerisaieTopic
@@ -50,12 +50,8 @@ public class CerisaieTopic implements MessageListener {
         try {
             // On transforme le message en demande d'inscription
             if (message != null) {
-                System.out.println("je suis là ");
                 ObjectMessage objectMessage = (ObjectMessage) message;
                 Activite uneActivite = (Activite) objectMessage.getObject();
-                // On insère cette demande d'inscription dans la base de données
-                // on s'assure que l'écriture ne se fera qu'une fois.
-                message = null;
                 try {
                     // on construit un objet Entity
                     ActiviteEntity activiteEntity = new ActiviteEntity();
@@ -65,8 +61,13 @@ public class CerisaieTopic implements MessageListener {
                     activiteEntity.setNbloc(uneActivite.getNbloc());
                     activiteEntity.setNumsej(uneActivite.getNumsejour());
 
-                    EnregistreInscription uneE = new EnregistreInscription();
-                    uneE.insertionInscription(activiteEntity);
+                    Service service = new Service();
+                    // On vérifie si l'activité et déjà enregistrée en BDD ou pas
+                    ActiviteEntity activite = service.getActiviteIfExist(activiteEntity.getNumsej(), activiteEntity.getCodesport(), activiteEntity.getDatejour());
+                    if(activite != null && activite.equals(activiteEntity))
+                        service.updateActivite(activiteEntity, activite.getNbloc());
+                    else
+                        service.insertionActivite(activiteEntity);
                 } catch (NamingException er) {
                     EcritureErreur(er.getMessage());
                 } catch (MonException e) {
