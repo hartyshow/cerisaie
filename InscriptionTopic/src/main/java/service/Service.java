@@ -2,33 +2,22 @@ package service;
 
 import meserreurs.MonException;
 import javax.persistence.*;
-
-import metier.Activite;
 import metier.ActiviteEntity;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Service extends EntityService{
-
-  // on décvlare un EntityManager
-    private EntityManagerFactory factory;
-    private EntityManager entityManager;
-
     public void insertionActivite(ActiviteEntity uneActivite) throws Exception, MonException {
         EntityTransaction transac = startTransaction();
         try {
-            if (!entityManager.contains(uneActivite))
+            if (!entitymanager.contains(uneActivite))
             {
                 // On démarre une transaction
                 transac.begin();
-                entityManager.persist(uneActivite);
-                entityManager.flush();
+                entitymanager.persist(uneActivite);
                 // on valide la transacition
                 transac.commit();
             }
-            entityManager.close();
+            entitymanager.close();
 
         } catch (EntityNotFoundException h) {
             new MonException("Erreur d'insertion", h.getMessage());
@@ -42,14 +31,13 @@ public class Service extends EntityService{
         try {
             // On démarre une transaction
             transac.begin();
-            entityManager.createQuery("UPDATE ActiviteEntity a SET a.nbloc = :nbbloc WHERE a.codesport = :codeSport " +
+            entitymanager.createQuery("UPDATE ActiviteEntity a SET a.nbloc = :nbbloc WHERE a.codesport = :codeSport " +
                     "AND a.datejour = :datedebut AND a.numsej = :numSej").setParameter("codeSport", uneActivite.getCodesport())
                     .setParameter("datedebut", uneActivite.getDatejour()).setParameter("numSej", uneActivite.getNumsej())
                     .setParameter("nbbloc", uneActivite.getNbloc() + nbBlocToAdd).executeUpdate();
-            entityManager.flush();
             // on valide la transacition
             transac.commit();
-            entityManager.close();
+            entitymanager.close();
         } catch (EntityNotFoundException h) {
             new MonException("Erreur de mise à jour", h.getMessage());
         } catch (Exception e) {
