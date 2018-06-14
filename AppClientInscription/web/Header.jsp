@@ -27,6 +27,7 @@
         <ul class="nav navbar-nav">
             <li class="active"><a href="index.jsp">Accueil</a></li>
             <li><a href="Controleur?action=ajouteInscription">Inscription a une activite</a></li>
+            <li><a href="Controleur?action=planning">Visualiser planning</a></li>
         </ul>
     </div>
 </nav>

@@ -1,10 +1,7 @@
 package service;
 
 import meserreurs.MonException;
-import metier.Activite;
-import metier.Emplacement;
-import metier.Sejour;
-import metier.Sport;
+import metier.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,6 +21,24 @@ public class Utils {
         try {
             entityManager.getTransaction().begin();
             List<Sport> sports = entityManager.createQuery("SELECT s FROM SportEntity s").getResultList();
+            entityManager.close();
+
+            return sports;
+        }
+        catch (Exception e) {
+            new MonException("Erreur de sélection des sports", e.getMessage());
+
+            return null;
+        }
+    }
+
+    public List<SportEntity> getSportsEntity() {
+        factory = Persistence.createEntityManagerFactory("PInscription");
+        entityManager  = factory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            List<SportEntity> sports = entityManager.createQuery("SELECT s FROM SportEntity s").getResultList();
             entityManager.close();
 
             return sports;
@@ -76,6 +91,23 @@ public class Utils {
         try {
             entityManager.getTransaction().begin();
             List<Activite> activites = entityManager.createQuery("SELECT a FROM ActiviteEntity a").getResultList();
+            entityManager.close();
+
+            return activites;
+        }
+        catch (Exception e) {
+            new MonException("Erreur de sélection des activités", e.getMessage());
+
+            return null;
+        }
+    }
+    public List<ActiviteEntity> getActivitesEntity() {
+        factory = Persistence.createEntityManagerFactory("PInscription");
+        entityManager  = factory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            List<ActiviteEntity> activites = entityManager.createQuery("SELECT a FROM ActiviteEntity a").getResultList();
             entityManager.close();
 
             return activites;

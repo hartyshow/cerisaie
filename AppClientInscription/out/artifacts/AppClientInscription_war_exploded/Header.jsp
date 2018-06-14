@@ -9,7 +9,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="refresh" content="0;URL=javascript:fermer();">
-    <title> TP Inscription </title>
+    <title> TP Cerisaie </title>
     <link rel="stylesheet" href="resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="resources/css/style.css">
     <link rel="stylesheet" href="resources/css/jquery-ui.min.css">
@@ -21,11 +21,13 @@
 <nav class="navbar navbar-inverse inscription-header">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a id="logo_polytech" class="navbar-brand" href="index.jsp"> <img src="resources/images/logo.png" height="50px"></a>
+            <a id="logo_polytech" class="navbar-brand" href="index.jsp"> <img src="resources/images/1f338.png"
+                                                                              height="50px"></a>
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="index.jsp">Accueil</a></li>
-            <li><a href="Controleur?action=ajouteInscription">Ajouter Inscription</a></li>
+            <li><a href="Controleur?action=ajouteInscription">Inscription a une activite</a></li>
+            <li><a href="Controleur?action=planning">Visualiser planning</a></li>
         </ul>
     </div>
 </nav>

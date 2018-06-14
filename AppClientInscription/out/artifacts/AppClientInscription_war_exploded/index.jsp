@@ -17,9 +17,14 @@
 <div>
     <div class="container">
         <div class="form-group">
-            <label> Gestion des demandes d'inscription </label>
+            <h4>Gestion des demandes d'inscription à des activités</h4>
             <BR> <BR>
-            <label>Bienvenue sur la page d'accueil de gestion des demandes d'inscription. </label>
+            <b>Bienvenue sur la page d'accueil de gestion des demandes d'inscription à une prestation sportive du
+                camping</b>
+        </div>
+        <div class="col-md-6">
+            <img class="img-responsive imageAccueil" style="border:3px solid #f6f7ff;"
+                 src="<c:url value="/resources/images/group-camping.jpg" />" alt="Logo Cerisaie"/>
         </div>
     </div>
 </div>

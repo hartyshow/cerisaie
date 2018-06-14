@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="CerisaieTopic">
-    <output-path>$PROJECT_DIR$/../../../../../../../Downloads/Logiciels/wildfly-12.0.0.Final/standalone/deployments</output-path>
+    <output-path>$PROJECT_DIR$/../../../wildfly-12.0.0.Final/standalone/deployments</output-path>
     <root id="archive" name="CerisaieTopic.jar">
       <element id="module-output" name="InscriptionTopic" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/ejb/javax.ejb-api/3.2.2/javax.ejb-api-3.2.2.jar" path-in-jar="/" />

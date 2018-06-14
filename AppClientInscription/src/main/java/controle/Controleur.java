@@ -1,11 +1,16 @@
 package controle;
 
+import com.google.gson.Gson;
 import meserreurs.MonException;
 import metier.Activite;
+import metier.ActiviteEntity;
+import metier.Sport;
+import metier.SportEntity;
 import service.Utils;
 
 import javax.annotation.Resource;
 import javax.jms.*;
+import javax.json.JsonArray;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -15,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Servlet implementation class Traitement
@@ -27,6 +34,9 @@ public class Controleur extends HttpServlet {
 	private static final String AJOUTER_INSCRIPTION = "ajouteInscription";
 	private static final String ENVOI_INSCRIPTION = "envoiInscription";
 	private static final String RETOUR_ACCUEIL = "Retour";
+	private static final String PLANNING = "planning";
+	private static final String GETACTIVITE = "getActivites";
+	private static final String CODESPORT = "codeSport";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -83,6 +93,7 @@ public class Controleur extends HttpServlet {
 	public void TraiteRequete(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		// On récupère l'action
 		String actionName = request.getParameter(ACTION_TYPE);
+		String codeDuSport = request.getParameter(CODESPORT);
 
 		// Affichage du formulaire d'inscription à une activité
 		if (AJOUTER_INSCRIPTION.equals(actionName)) {
@@ -91,6 +102,48 @@ public class Controleur extends HttpServlet {
             request.setAttribute("sejours", new Utils().getSejours());
 
 			request.getRequestDispatcher("AjouteInscription.jsp").forward(request, response);
+		}
+
+		else if (actionName.contains(GETACTIVITE))
+		{
+			List<ActiviteEntity> activities = new Utils().getActivitesEntity();
+			List<Object> json = new ArrayList<>();
+
+			List<SportEntity> sports = new Utils().getSportsEntity();
+			for(SportEntity sport : sports)
+			{
+				if(sport.getCodesport() == Integer.valueOf(codeDuSport))
+				{
+					json.add(sport.getTarifunite());
+					json.add(sport.getUnitetpssport());
+				}
+			}
+
+			for(ActiviteEntity activite : activities)
+			{
+				System.out.println(activite.getCodesport());
+				if(activite.getCodesport() == Integer.valueOf(codeDuSport))
+				{
+					json.add(activite);
+				}
+			}
+
+			String jsonResponse = new Gson().toJson(json);
+
+			request.setAttribute("data", jsonResponse);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(jsonResponse);
+
+			//request.getRequestDispatcher("Planning.jsp").forward(request, response);
+		}
+
+		else if(PLANNING.equals(actionName))
+		{
+			request.setAttribute("sports", new Utils().getSports());
+			//request.setAttribute("activites", new Utils().getActivites());
+
+			request.getRequestDispatcher("Planning.jsp").forward(request, response);
 		}
 
 		else if (RETOUR_ACCUEIL.equals(actionName)) {
